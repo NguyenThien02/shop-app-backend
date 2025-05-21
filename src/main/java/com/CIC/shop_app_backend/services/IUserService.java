@@ -6,5 +6,5 @@ import com.CIC.shop_app_backend.entity.User;
 import java.util.List;
 
 public interface IUserService {
-    String RegisterUser(UserRegisterDTO userRegisterDTO);
+    User RegisterUser(UserRegisterDTO userRegisterDTO);
 }
