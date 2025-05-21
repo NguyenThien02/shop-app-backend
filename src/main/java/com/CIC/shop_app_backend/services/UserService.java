@@ -71,4 +71,15 @@ public class UserService implements IUserService{
         authenticationManager.authenticate(authenticationToken);
         return jwtTokenUtils.generateToken(existingUser);
     }
+
+    @Override
+    public User getUserDetailFromToken(String toke) throws Exception {
+        if(jwtTokenUtils.isTokenExpired(toke)){
+            throw new Exception("Token đã hết hạn");
+        }
+        String phoneNumber = jwtTokenUtils.extractPhoneNumber(toke);
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+        return user.get();
+    }
+
 }

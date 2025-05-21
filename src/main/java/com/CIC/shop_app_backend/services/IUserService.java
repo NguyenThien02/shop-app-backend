@@ -10,4 +10,6 @@ public interface IUserService {
     User registerUser(UserRegisterDTO userRegisterDTO);
 
     String loginUser(UserLoginDTO userLoginDTO);
+
+    User getUserDetailFromToken(String toke) throws Exception;
 }

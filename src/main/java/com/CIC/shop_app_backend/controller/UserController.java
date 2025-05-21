@@ -48,4 +48,16 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/details")
+    public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token){
+        try{
+            String extractedToken = token.substring(7);
+            User user = userService.getUserDetailFromToken(extractedToken);
+            UserResponse userResponse = UserResponse.fromUser(user);
+            return ResponseEntity.ok(userResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
