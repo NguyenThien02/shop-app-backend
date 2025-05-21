@@ -1,5 +1,6 @@
 package com.CIC.shop_app_backend.controller;
 
+import com.CIC.shop_app_backend.dtos.UserLoginDTO;
 import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.responses.UserResponse;
@@ -20,18 +21,30 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> RegisterUser(
+    public ResponseEntity<?> registerUser(
             @Valid @RequestBody UserRegisterDTO userRegisterDTO
     ){
         try{
             if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRetypePassword())) {
                 return ResponseEntity.badRequest().body("Password does not match");
             }
-            User user = userService.RegisterUser(userRegisterDTO);
+            User user = userService.registerUser(userRegisterDTO);
             UserResponse userResponse = UserResponse.fromUser(user);
             return ResponseEntity.ok(userResponse);
         }
         catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(
+            @Valid @RequestBody UserLoginDTO userLoginDTO
+            ){
+        try {
+            String token = userService.loginUser(userLoginDTO);
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

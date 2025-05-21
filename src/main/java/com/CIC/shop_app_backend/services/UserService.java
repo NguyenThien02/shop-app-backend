@@ -1,5 +1,7 @@
 package com.CIC.shop_app_backend.services;
 
+import com.CIC.shop_app_backend.components.JwtTokenUtils;
+import com.CIC.shop_app_backend.dtos.UserLoginDTO;
 import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.Role;
 import com.CIC.shop_app_backend.entity.User;
@@ -8,8 +10,13 @@ import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.RoleRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -19,9 +26,11 @@ public class UserService implements IUserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @Override
-    public User RegisterUser(UserRegisterDTO userRegisterDTO) {
+    public User registerUser(UserRegisterDTO userRegisterDTO) {
         String phoneNumber = userRegisterDTO.getPhoneNumber();
         if(userRepository.existsByPhoneNumber(phoneNumber)){
             throw new DataIntegrityViolationException("Phone number already exists");
@@ -40,5 +49,26 @@ public class UserService implements IUserService{
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public String loginUser(UserLoginDTO userLoginDTO) {
+        if(!userRepository.existsByPhoneNumber(userLoginDTO.getPhoneNumber())){
+            throw new DataNotFoundException("Invalid phone number");
+        }
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(userLoginDTO.getPhoneNumber());
+        User existingUser = optionalUser.get();
+
+        if(!passwordEncoder.matches(userLoginDTO.getPassword(),existingUser.getPassword())){
+            throw new BadCredentialsException("Incorrect phone number or password");
+        }
+        Optional<Role> optionalRole = roleRepository.findById(userLoginDTO.getRoleId());
+        if(optionalRole.isEmpty() || !userLoginDTO.getRoleId().equals(existingUser.getRole().getId())) {
+            throw new DataNotFoundException("You do not have this role");
+        }
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userLoginDTO.getPhoneNumber(),userLoginDTO.getPassword(),existingUser.getAuthorities());
+        authenticationManager.authenticate(authenticationToken);
+        return jwtTokenUtils.generateToken(existingUser);
     }
 }
