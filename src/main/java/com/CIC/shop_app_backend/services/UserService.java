@@ -62,10 +62,7 @@ public class UserService implements IUserService{
         if(!passwordEncoder.matches(userLoginDTO.getPassword(),existingUser.getPassword())){
             throw new BadCredentialsException("Incorrect phone number or password");
         }
-        Optional<Role> optionalRole = roleRepository.findById(userLoginDTO.getRoleId());
-        if(optionalRole.isEmpty() || !userLoginDTO.getRoleId().equals(existingUser.getRole().getId())) {
-            throw new DataNotFoundException("You do not have this role");
-        }
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 userLoginDTO.getPhoneNumber(),userLoginDTO.getPassword(),existingUser.getAuthorities());
         authenticationManager.authenticate(authenticationToken);
@@ -80,6 +77,12 @@ public class UserService implements IUserService{
         String phoneNumber = jwtTokenUtils.extractPhoneNumber(toke);
         Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
         return user.get();
+    }
+
+    @Override
+    public User getUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new DataNotFoundException("No user found with phone number: " + phoneNumber));
     }
 
 }

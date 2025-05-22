@@ -12,4 +12,6 @@ public interface IUserService {
     String loginUser(UserLoginDTO userLoginDTO);
 
     User getUserDetailFromToken(String toke) throws Exception;
+
+    User getUserByPhoneNumber(String phoneNumber);
 }

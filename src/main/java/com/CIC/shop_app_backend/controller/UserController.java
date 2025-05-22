@@ -3,6 +3,7 @@ package com.CIC.shop_app_backend.controller;
 import com.CIC.shop_app_backend.dtos.UserLoginDTO;
 import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.User;
+import com.CIC.shop_app_backend.responses.LoginResponse;
 import com.CIC.shop_app_backend.responses.UserResponse;
 import com.CIC.shop_app_backend.services.UserService;
 import jakarta.validation.Valid;
@@ -43,7 +44,10 @@ public class UserController {
             ){
         try {
             String token = userService.loginUser(userLoginDTO);
-            return ResponseEntity.ok(token);
+            User user = userService.getUserByPhoneNumber(userLoginDTO.getPhoneNumber());
+            UserResponse userResponse = UserResponse.fromUser(user);
+            LoginResponse loginResponse = new LoginResponse(userResponse, token);
+            return ResponseEntity.ok(loginResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
