@@ -14,4 +14,6 @@ public interface IUserService {
     User getUserDetailFromToken(String toke) throws Exception;
 
     User getUserByPhoneNumber(String phoneNumber);
+
+    User getUserByUserId(Long userId);
 }

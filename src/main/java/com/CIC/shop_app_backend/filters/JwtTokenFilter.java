@@ -39,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             //Request không yêu cầu token
             if (isBypassToken(request)) {
-                filterChain.doFilter(request, response); //enable bypass Tất cả đều có thể qua
+                filterChain.doFilter(request, response);
                 return;
             }
             //Request yêu cầu có kiểm tra token
@@ -75,7 +75,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Pair.of(String.format("%s/users", apiPrefix), "POST"),
                 Pair.of(String.format("%s/users", apiPrefix), "GET"),
                 Pair.of(String.format("%s/roles", apiPrefix), "GET"),
-                Pair.of(String.format("%s/products", apiPrefix), "GET")
+                Pair.of(String.format("%s/products", apiPrefix), "GET"),
+                Pair.of(String.format("%s/categories", apiPrefix), "GET")
         );
         String path = request.getServletPath();
         if (path.startsWith("/swagger-ui")||

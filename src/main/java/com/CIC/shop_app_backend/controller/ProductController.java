@@ -84,7 +84,7 @@ public class ProductController {
     }
 
     @PostMapping(value = "create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadImageProduct(
+    public ResponseEntity<?> createProduct(
             @RequestParam("product") String productDtoJson,
             @RequestParam("file") MultipartFile file
     ){

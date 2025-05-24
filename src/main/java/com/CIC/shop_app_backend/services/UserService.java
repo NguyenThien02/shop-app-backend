@@ -85,4 +85,12 @@ public class UserService implements IUserService{
                 .orElseThrow(() -> new DataNotFoundException("No user found with phone number: " + phoneNumber));
     }
 
+    @Override
+    public User getUserByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new DataNotFoundException("No user found with id" + userId));
+        return user;
+    }
+
+
 }

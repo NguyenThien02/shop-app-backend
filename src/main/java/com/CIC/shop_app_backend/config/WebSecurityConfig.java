@@ -58,6 +58,8 @@ public class WebSecurityConfig {
                             .requestMatchers(POST,
                                     String.format("%s/products/**", apiPrefix)).hasRole(Role.SELLER)
 
+                            .requestMatchers(GET,
+                                    String.format("%s/categories/**", apiPrefix)).permitAll()
 
                             .anyRequest().authenticated();
                 });

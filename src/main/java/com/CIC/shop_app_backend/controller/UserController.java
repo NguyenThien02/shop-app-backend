@@ -53,11 +53,22 @@ public class UserController {
         }
     }
 
-    @GetMapping("/details")
-    public ResponseEntity<?> getUserDetails(@RequestHeader("Authorization") String token){
+    @GetMapping("/detail")
+    public ResponseEntity<?> getUserDetailByToken(@RequestHeader("Authorization") String token){
         try{
             String extractedToken = token.substring(7);
             User user = userService.getUserDetailFromToken(extractedToken);
+            UserResponse userResponse = UserResponse.fromUser(user);
+            return ResponseEntity.ok(userResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("detail/{user-id}")
+    public ResponseEntity<?> getUserDetailById(@PathVariable("user-id") Long userId){
+        try{
+            User user = userService.getUserByUserId(userId);
             UserResponse userResponse = UserResponse.fromUser(user);
             return ResponseEntity.ok(userResponse);
         } catch (Exception e) {
