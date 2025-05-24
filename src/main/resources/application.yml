@@ -20,4 +20,4 @@ api:
   prefix: api/v1/shop-app
 
 jwt:
-  expiration: 2592000    # 30 days = 30 * 24 * 60 * 60 = 2592000
+  expiration: 2592000

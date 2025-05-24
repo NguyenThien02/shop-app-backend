@@ -43,7 +43,7 @@ public class UserResponse {
 
     public static UserResponse fromUser(User user){
         return UserResponse.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
                 .address(user.getAddress())

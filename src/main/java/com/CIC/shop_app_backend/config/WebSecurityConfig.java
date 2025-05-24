@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +48,16 @@ public class WebSecurityConfig {
 
                             .requestMatchers(GET,
                                     String.format("%s/roles/**", apiPrefix)).permitAll()
+
+                            .requestMatchers(GET,
+                                    String.format("%s/users/**", apiPrefix)).permitAll()
+
+
+                            .requestMatchers(GET,
+                                    String.format("%s/products/**", apiPrefix)).permitAll()
+                            .requestMatchers(POST,
+                                    String.format("%s/products/**", apiPrefix)).hasRole(Role.SELLER)
+
 
                             .anyRequest().authenticated();
                 });

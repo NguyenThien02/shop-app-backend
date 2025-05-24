@@ -59,15 +59,15 @@ public class JwtTokenUtils {
     // Hàm trích xuất tất cả các claims từ token
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())         // Thiết lập khóa bí mật để giải mã token
-                .build()                               //Tạo một đối tượng JwtParser từ builder
-                .parseClaimsJws(token)                 // Parse token và trích xuất các claims
-                .getBody();                            // Lấy phần claims từ token
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
     // Hàm lấy một claim cụ thể từ token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = this.extractAllClaims(token);  // Trích xuất toàn bộ claims
-        return claimsResolver.apply(claims);            // Áp dụng hàm để trích xuất claim cụ thể
+        final Claims claims = this.extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     //Hàm kiểm tra token đã hết hạn chưa

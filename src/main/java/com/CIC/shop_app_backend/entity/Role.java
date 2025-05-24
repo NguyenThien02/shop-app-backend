@@ -13,11 +13,12 @@ import lombok.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "role_id")
+    private Long roleId;
 
     @Column(name = "name", length = 20)
     private String name;
 
     public static String USER = "USER";
-    public static String ADMIN = "ADMIN";
+    public static String SELLER = "SELLER";
 }
