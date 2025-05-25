@@ -5,7 +5,7 @@ import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.responses.LoginResponse;
 import com.CIC.shop_app_backend.responses.UserResponse;
-import com.CIC.shop_app_backend.services.UserService;
+import com.CIC.shop_app_backend.services.Impl.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class UserController {
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(

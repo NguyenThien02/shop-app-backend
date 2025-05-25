@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.ProductDTO;
 import com.CIC.shop_app_backend.entity.Product;
@@ -12,5 +12,7 @@ public interface IProductService {
     Product createProduct(ProductDTO productDTO);
 
     Product updateProduct(ProductDTO productDTO);
+
+    Product getProductDetail(Long productId);
 
 }

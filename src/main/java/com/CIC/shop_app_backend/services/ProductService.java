@@ -9,16 +9,16 @@ import com.CIC.shop_app_backend.repository.CategoryRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
 import com.CIC.shop_app_backend.responses.UserResponse;
+import com.CIC.shop_app_backend.services.Impl.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
@@ -60,5 +60,12 @@ public class ProductService implements IProductService{
     public Product updateProduct(ProductDTO productDTO) {
 
         return null;
+    }
+
+    @Override
+    public Product getProductDetail(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new DataNotFoundException("Not found product by ID: " + productId));
+        return product;
     }
 }

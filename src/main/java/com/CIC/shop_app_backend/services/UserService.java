@@ -9,6 +9,7 @@ import com.CIC.shop_app_backend.exceptions.DataIntegrityViolationException;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.RoleRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
+import com.CIC.shop_app_backend.services.Impl.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 
-public class UserService implements IUserService{
+public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;

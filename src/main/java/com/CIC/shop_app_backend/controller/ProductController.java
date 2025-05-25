@@ -2,11 +2,11 @@ package com.CIC.shop_app_backend.controller;
 
 import com.CIC.shop_app_backend.dtos.PaginationRequest;
 import com.CIC.shop_app_backend.dtos.ProductDTO;
-import com.CIC.shop_app_backend.entity.Category;
 import com.CIC.shop_app_backend.entity.Product;
+import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.responses.ListProductResponse;
 import com.CIC.shop_app_backend.responses.ProductResponse;
-import com.CIC.shop_app_backend.services.ProductService;
+import com.CIC.shop_app_backend.services.Impl.IProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -32,7 +32,7 @@ import java.util.UUID;
 @RequestMapping("${api.prefix}/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+    private final IProductService productService;
     private final ObjectMapper objectMapper;
 
     @GetMapping("/by-category")
@@ -139,6 +139,20 @@ public class ProductController {
                         .contentType(MediaType.IMAGE_JPEG)
                         .body(new UrlResource(Paths.get("uploads/notfound.jpg").toUri()));
             }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("{product-id}")
+    public ResponseEntity<?> getProductDetail(
+            @PathVariable("product-id") Long productId
+    ){
+        try {
+            Product product = productService.getProductDetail(productId);
+            ProductResponse productRepository = ProductResponse.fromProduct(product);
+
+            return ResponseEntity.ok(productRepository);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

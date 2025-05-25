@@ -17,6 +17,7 @@ public class Cart extends BaseEntity{
     @Column(name = "cart_id")
     private Long cartId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

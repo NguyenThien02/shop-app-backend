@@ -9,7 +9,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Setter
 @Getter
 @AllArgsConstructor
@@ -22,12 +21,13 @@ public class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @PrePersist
+    @PrePersist // Kích hoạt khi: Entity được lưu lần đầu vào database khi gọi repository.save(entity)
     protected void onCreate(){
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
+    // Kích hoạt khi: Entity được cập nhật (khi gọi repository.save(entity) trên một bản ghi đã tồn tại).
     @PreUpdate
     protected void onUpdate(){
         updatedAt = LocalDateTime.now();

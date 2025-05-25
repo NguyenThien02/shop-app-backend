@@ -20,9 +20,9 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    private Cart Cart;
+    private Cart cart;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -31,5 +31,10 @@ public class CartItem {
 
     @Column(name = "added_at")
     private LocalDateTime addedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        addedAt = LocalDateTime.now();
+    }
 
 }

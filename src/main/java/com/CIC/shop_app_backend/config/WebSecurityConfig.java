@@ -30,6 +30,7 @@ public class WebSecurityConfig {
     @Value("${api.prefix}")
     private String apiPrefix;
     private final JwtTokenFilter jwtTokenFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -60,6 +61,16 @@ public class WebSecurityConfig {
 
                             .requestMatchers(GET,
                                     String.format("%s/categories/**", apiPrefix)).permitAll()
+
+                            .requestMatchers(POST,
+                                    String.format("%s/carts/**", apiPrefix)).hasRole(Role.USER)
+                            .requestMatchers(GET,
+                                    String.format("%s/carts/**", apiPrefix)).hasRole(Role.USER)
+
+                            .requestMatchers(POST,
+                                    String.format("%s/cart-item/**", apiPrefix)).hasRole(Role.USER)
+                            .requestMatchers(GET,
+                                    String.format("%s/cart-item/**", apiPrefix)).hasRole(Role.USER)
 
                             .anyRequest().authenticated();
                 });

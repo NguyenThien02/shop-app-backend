@@ -21,3 +21,4 @@ api:
 
 jwt:
   expiration: 2592000
+  securityKey: Dm2Atabz2nObWsHxeeoIBZnqC8lWTYLFoMC/Hr3E7s4=

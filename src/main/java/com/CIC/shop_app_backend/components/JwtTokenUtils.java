@@ -23,7 +23,10 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
-    private String secretKey = generateSecretKey();
+
+//    private String securityKey = generateSecretKey();
+    @Value("${jwt.securityKey}")
+    private String securityKey;
 
     @Value("${jwt.expiration}")
     private int expiration;
@@ -38,6 +41,7 @@ public class JwtTokenUtils {
     public String generateToken(User user) throws DataInvalidParamException {
         Map<String, Object> claims = new HashMap<>();
         claims.put("phoneNumber", user.getPhoneNumber());
+//        generateSecretKey();
         try{
             String toke = Jwts.builder()
                     .setClaims(claims)
@@ -52,7 +56,7 @@ public class JwtTokenUtils {
     }
 
     private Key getSignInKey(){
-        byte[] bytes = Decoders.BASE64.decode(secretKey);
+        byte[] bytes = Decoders.BASE64.decode(securityKey);
         return Keys.hmacShaKeyFor(bytes);
     }
 
