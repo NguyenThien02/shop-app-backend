@@ -53,6 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if (phoneNumber != null
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User userDetails = (User) userDetailsService.loadUserByUsername(phoneNumber);
+
                 if (jwtTokenUtils.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(
@@ -60,6 +61,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     null,
                                     userDetails.getAuthorities()
                             );
+                    //buildDetails(request) lấy dữ liệu từ HttpServletRequest.
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }

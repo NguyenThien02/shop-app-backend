@@ -84,7 +84,7 @@ public class JwtTokenUtils {
     public String extractPhoneNumber(String token){
         return extractClaim(token, Claims::getSubject);
     }
-    // Kiểm tra UserName với token còn hạn hay không và cái phone number có trùnguraSecurytiFig với userName của UserDetail không
+
     public boolean validateToken(String token, UserDetails userDetails){
         String phoneNumber = extractPhoneNumber(token);
         return (phoneNumber.equals(userDetails.getUsername()) &&

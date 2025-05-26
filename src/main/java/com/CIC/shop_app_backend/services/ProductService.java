@@ -34,8 +34,7 @@ public class ProductService implements IProductService {
         if(!categoryRepository.existsById(productDTO.getCategoryId())){
             throw new DataNotFoundException("Category does not exist");
         }
-        if(!userRepository.existsById(productDTO.getSellerId()) ||
-            productDTO.getSellerId() != 2){
+        if(!userRepository.existsById(productDTO.getSellerId())){
             throw new DataNotFoundException("Seller does not exist");
         }
         Category newCategory = categoryRepository.findById(productDTO.getCategoryId())
