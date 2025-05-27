@@ -9,4 +9,6 @@ public interface ICartItemService {
     CartItem createCartItem (CartItemsDTO cartItemsDTO);
 
     Page<CartItem> getAllCartItemByCartId(PageRequest pageRequest, Long cartId);
+
+    void deleteAllCartItem();
 }

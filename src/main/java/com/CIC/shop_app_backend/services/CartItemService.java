@@ -22,7 +22,6 @@ public class CartItemService implements ICartItemService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    @Transactional
     @Override
     public CartItem createCartItem(CartItemsDTO cartItemsDTO) {
 
@@ -36,12 +35,18 @@ public class CartItemService implements ICartItemService {
         cartItem.setCart(cart);
         cartItem.setProduct(product);
         cartItem.setQuantity(cartItemsDTO.getQuantity());
-
-        return cartItemRepository.save(cartItem);
+        CartItem cartItem1 = cartItemRepository.save(cartItem);
+        return  cartItem1;
     }
 
     @Override
     public Page<CartItem> getAllCartItemByCartId(PageRequest pageRequest, Long cartId) {
         return cartItemRepository.findByCart_CartId(cartId, pageRequest);
     }
+
+    @Override
+    public void deleteAllCartItem() {
+        cartItemRepository.deleteAll();
+    }
+
 }

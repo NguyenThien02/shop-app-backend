@@ -72,6 +72,10 @@ public class WebSecurityConfig {
                             .requestMatchers(GET,
                                     String.format("%s/cart-item/**", apiPrefix)).hasRole(Role.USER)
 
+
+                            .requestMatchers(POST,
+                                    String.format("%s/orders/**", apiPrefix)).hasRole(Role.USER)
+
                             .anyRequest().authenticated();
                 });
         http.cors(cors -> {

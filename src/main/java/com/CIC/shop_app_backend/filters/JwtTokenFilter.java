@@ -37,7 +37,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            //Request không yêu cầu token
             if (isBypassToken(request)) {
                 filterChain.doFilter(request, response);
                 return;

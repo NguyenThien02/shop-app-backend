@@ -4,13 +4,11 @@ import com.CIC.shop_app_backend.entity.enums.OrderStatus;
 import com.CIC.shop_app_backend.entity.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Orders")
+@Table(name = "orders")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -29,22 +27,26 @@ public class Order extends BaseEntity{
     @Column(name = "order_date")
     private LocalDate orderDate;
 
+    @PrePersist
+    protected void orderDate(){
+        orderDate = LocalDate.now();
+    }
+
     @Column(name = "total_amount")
     private Double totalAmount;
 
     @Column(name = "shipping_address")
     private String shippingAddress;
 
-    @Enumerated(EnumType.STRING) // Lưu giá trị dạng chuỗi trong DB
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 50)
-    @ColumnDefault("'PENDING'") // Giá trị mặc định
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false, length = 50)
-    @ColumnDefault("'UNPAID'")
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
 
     private String notes;
+
 
 }

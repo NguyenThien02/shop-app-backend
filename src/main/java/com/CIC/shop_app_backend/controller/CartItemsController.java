@@ -28,7 +28,9 @@ public class CartItemsController {
             @Valid @RequestBody CartItemsDTO cartItemsDTO
     ) {
         try {
-            return ResponseEntity.ok(cartItemService.createCartItem(cartItemsDTO));
+            CartItem cartItem = cartItemService.createCartItem(cartItemsDTO);
+            CartItemResponse cartItemResponse = CartItemResponse.fromCartItem(cartItem);
+            return ResponseEntity.ok(cartItemResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

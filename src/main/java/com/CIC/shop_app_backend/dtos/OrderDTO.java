@@ -18,10 +18,13 @@ public class OrderDTO {
     @NotNull(message = "User ID is required")
     private Long userId; // Sử dụng Long cho ID người dùng
 
-    @JsonProperty("shipping_address")
+    @JsonProperty("shipping_addres")
     @NotBlank(message = "Shipping address is required")
     @Size(max = 500, message = "Shipping address cannot exceed 500 characters")
     private String shippingAddress;
+
+    @JsonProperty("total_amount")
+    private Double totalAmount;
 
     @JsonProperty("notes")
     @Size(max = 4000, message = "Notes cannot exceed 4000 characters") // NVARCHAR(MAX) có thể rất dài, giới hạn ở DTO
