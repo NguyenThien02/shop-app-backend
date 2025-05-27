@@ -4,6 +4,7 @@ import com.CIC.shop_app_backend.dtos.CartItemsDTO;
 import com.CIC.shop_app_backend.entity.CartItem;
 import com.CIC.shop_app_backend.responses.CartItemResponse;
 import com.CIC.shop_app_backend.responses.ListCartItemResponse;
+import com.CIC.shop_app_backend.responses.MessageResponse;
 import com.CIC.shop_app_backend.services.CartItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.prefix}/cart-items")
@@ -56,6 +58,35 @@ public class CartItemsController {
                             .cartItemResponseList(cartItemResponseList)
                             .totalPages(cartItemResponsePage.getTotalPages())
                     .build()) ;
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("{cart-items-id}")
+    public ResponseEntity<?> deleteCartItemById(
+            @PathVariable("cart-items-id") Long cartItemId
+    ){
+        try {
+            cartItemService.deleteCartItemById(cartItemId);
+            String message = "Delete successful with cart item Id: " + cartItemId;
+            return ResponseEntity.ok(new MessageResponse(message,true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("by-ids")
+    public ResponseEntity<?> getCartItemByIds(
+            @RequestBody List<Long> cartItems
+    ){
+        try {
+            List<CartItem> cartItemList = cartItemService.getCartItemByIds(cartItems);
+            List<CartItemResponse> cartItemResponseList = cartItemList.stream()
+                    .map(CartItemResponse::fromCartItem)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(cartItemResponseList);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

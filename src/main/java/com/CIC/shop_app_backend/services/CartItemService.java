@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CartItemService implements ICartItemService {
@@ -45,8 +47,13 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public void deleteAllCartItem() {
-        cartItemRepository.deleteAll();
+    public void deleteCartItemById(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
+    }
+
+    @Override
+    public List<CartItem> getCartItemByIds(List<Long> cartItemsIds) {
+        return cartItemRepository.findAllByCartItemIdIn(cartItemsIds);
     }
 
 }
