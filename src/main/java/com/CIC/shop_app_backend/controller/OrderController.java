@@ -40,7 +40,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("{user-id}")
+    @GetMapping("by-user-id/{user-id}")
     public ResponseEntity<?> getOrderByUserId(@PathVariable("user-id") Long userId,
                                               @ModelAttribute PaginationRequest paginationRequest
                                               ){
@@ -62,4 +62,16 @@ public class OrderController {
         }
     }
 
+    @GetMapping("by-order-id/{order-id}")
+    public ResponseEntity<?> getOrderById(
+            @PathVariable("order-id") Long orderId
+    ){
+        try {
+            Order order = orderService.getOrderById(orderId);
+            OrderResponse orderResponse = OrderResponse.fromOrder(order);
+            return ResponseEntity.ok(orderResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

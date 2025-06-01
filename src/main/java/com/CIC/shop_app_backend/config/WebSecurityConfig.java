@@ -74,7 +74,10 @@ public class WebSecurityConfig {
 
 
                             .requestMatchers(
-                                    String.format("%s/orders/**", apiPrefix)).hasRole(Role.USER)
+                                    String.format("%s/orders/**", apiPrefix)).permitAll()
+
+                            .requestMatchers(
+                                    String.format("%s/order-details/**", apiPrefix)).permitAll()
 
                             .anyRequest().authenticated();
                 });

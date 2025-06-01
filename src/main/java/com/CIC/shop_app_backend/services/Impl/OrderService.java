@@ -37,4 +37,11 @@ public class OrderService implements IOrderService {
         Page<Order> orderPage = orderRepository.findByUser_UserId(userId, pageRequest);
         return orderPage;
     }
+
+    @Override
+    public Order getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy order với ID: " + orderId));
+        return order;
+    }
 }

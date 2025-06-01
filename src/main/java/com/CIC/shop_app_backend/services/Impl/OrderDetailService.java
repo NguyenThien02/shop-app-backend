@@ -10,6 +10,8 @@ import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.services.IOrderDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,5 +36,10 @@ public class OrderDetailService implements IOrderDetailService {
         orderDetail.setTotalMoney(orderDetailDTO.getTotalMoney());
 
         return orderDetailRepository.save(orderDetail);
+    }
+
+    @Override
+    public Page<OrderDetail> getOrderDetailByOrderId(Long orderId, PageRequest pageRequest) {
+        return orderDetailRepository.findByOrder_OrderId(orderId, pageRequest);
     }
 }

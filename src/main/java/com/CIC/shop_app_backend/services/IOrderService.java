@@ -7,5 +7,8 @@ import org.springframework.data.domain.PageRequest;
 
 public interface IOrderService {
     Order createOrder(OrderDTO orderDTO);
+
     Page<Order> getOrderByUserId(Long userId, PageRequest pageRequest);
+
+    Order getOrderById(Long orderId);
 }
