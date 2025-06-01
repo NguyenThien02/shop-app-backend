@@ -1,7 +1,7 @@
 package com.CIC.shop_app_backend.controller;
 
 import com.CIC.shop_app_backend.entity.Role;
-import com.CIC.shop_app_backend.services.Impl.IRoleService;
+import com.CIC.shop_app_backend.services.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

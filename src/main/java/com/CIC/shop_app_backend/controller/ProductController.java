@@ -6,7 +6,7 @@ import com.CIC.shop_app_backend.entity.Product;
 import com.CIC.shop_app_backend.responses.ListProductResponse;
 import com.CIC.shop_app_backend.responses.MessageResponse;
 import com.CIC.shop_app_backend.responses.ProductResponse;
-import com.CIC.shop_app_backend.services.Impl.IProductService;
+import com.CIC.shop_app_backend.services.IProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -65,7 +65,8 @@ public class ProductController {
 
     @GetMapping("/featured")
     public ResponseEntity<?> getFeaturedProduct(
-            @ModelAttribute PaginationRequest paginationRequest
+            @ModelAttribute PaginationRequest paginationRequest,
+            @RequestParam(defaultValue = "0", name = "category_id") Long category_id
     ) {
         try {
             PageRequest pageRequest = PageRequest.of(
@@ -73,7 +74,7 @@ public class ProductController {
                     paginationRequest.getLimit(),
                     Sort.by("stockQuantity").ascending()
             );
-            Page<Product> productPage = productService.getByProductCategory(pageRequest, paginationRequest.getCategory_id());
+            Page<Product> productPage = productService.getByProductCategory(pageRequest, category_id);
             Page<ProductResponse> productResponses = productPage.map(product -> ProductResponse.fromProduct(product));
             List<ProductResponse> productResponseList = productResponses.getContent();
             return ResponseEntity.ok(ListProductResponse.builder()

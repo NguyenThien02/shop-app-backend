@@ -73,7 +73,7 @@ public class WebSecurityConfig {
                                     String.format("%s/cart-item/**", apiPrefix)).hasRole(Role.USER)
 
 
-                            .requestMatchers(POST,
+                            .requestMatchers(
                                     String.format("%s/orders/**", apiPrefix)).hasRole(Role.USER)
 
                             .anyRequest().authenticated();

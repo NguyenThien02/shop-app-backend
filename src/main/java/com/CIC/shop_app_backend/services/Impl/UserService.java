@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.components.JwtTokenUtils;
 import com.CIC.shop_app_backend.dtos.UserLoginDTO;
@@ -9,7 +9,7 @@ import com.CIC.shop_app_backend.exceptions.DataIntegrityViolationException;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.RoleRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
-import com.CIC.shop_app_backend.services.Impl.IUserService;
+import com.CIC.shop_app_backend.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

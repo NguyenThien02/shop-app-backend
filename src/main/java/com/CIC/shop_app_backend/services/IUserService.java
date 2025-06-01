@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services.Impl;
+package com.CIC.shop_app_backend.services;
 
 import com.CIC.shop_app_backend.dtos.UserLoginDTO;
 import com.CIC.shop_app_backend.dtos.UserRegisterDTO;

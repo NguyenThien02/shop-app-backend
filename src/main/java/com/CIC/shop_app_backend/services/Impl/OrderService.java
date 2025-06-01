@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.OrderDTO;
 import com.CIC.shop_app_backend.entity.Order;
@@ -6,8 +6,10 @@ import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
-import com.CIC.shop_app_backend.services.Impl.IOrderService;
+import com.CIC.shop_app_backend.services.IOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +30,11 @@ public class OrderService implements IOrderService {
         orderNew.setNotes(orderDTO.getNotes());
 
         return orderRepository.save(orderNew);
+    }
+
+    @Override
+    public Page<Order> getOrderByUserId(Long userId, PageRequest pageRequest) {
+        Page<Order> orderPage = orderRepository.findByUser_UserId(userId, pageRequest);
+        return orderPage;
     }
 }

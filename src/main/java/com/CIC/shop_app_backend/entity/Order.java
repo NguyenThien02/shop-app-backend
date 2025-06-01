@@ -47,6 +47,4 @@ public class Order extends BaseEntity{
     private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
 
     private String notes;
-
-
 }

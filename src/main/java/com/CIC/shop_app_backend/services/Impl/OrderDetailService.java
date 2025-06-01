@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.OrderDetailDTO;
 import com.CIC.shop_app_backend.entity.Order;
@@ -8,7 +8,7 @@ import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.OrderDetailRepository;
 import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
-import com.CIC.shop_app_backend.services.Impl.IOrderDetailService;
+import com.CIC.shop_app_backend.services.IOrderDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

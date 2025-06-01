@@ -4,7 +4,7 @@ import com.CIC.shop_app_backend.dtos.CartDTO;
 import com.CIC.shop_app_backend.entity.Cart;
 import com.CIC.shop_app_backend.responses.CartResponse;
 import com.CIC.shop_app_backend.responses.UserResponse;
-import com.CIC.shop_app_backend.services.Impl.ICartService;
+import com.CIC.shop_app_backend.services.ICartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

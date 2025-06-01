@@ -5,14 +5,11 @@ import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.responses.LoginResponse;
 import com.CIC.shop_app_backend.responses.UserResponse;
-import com.CIC.shop_app_backend.services.Impl.IUserService;
+import com.CIC.shop_app_backend.services.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/users")

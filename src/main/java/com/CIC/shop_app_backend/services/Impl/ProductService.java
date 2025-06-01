@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.ProductDTO;
 import com.CIC.shop_app_backend.entity.Category;
@@ -9,7 +9,7 @@ import com.CIC.shop_app_backend.repository.CategoryRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
 import com.CIC.shop_app_backend.responses.UserResponse;
-import com.CIC.shop_app_backend.services.Impl.IProductService;
+import com.CIC.shop_app_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

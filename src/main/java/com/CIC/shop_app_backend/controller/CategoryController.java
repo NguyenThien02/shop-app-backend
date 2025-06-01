@@ -1,6 +1,6 @@
 package com.CIC.shop_app_backend.controller;
 
-import com.CIC.shop_app_backend.services.Impl.ICategoryService;
+import com.CIC.shop_app_backend.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

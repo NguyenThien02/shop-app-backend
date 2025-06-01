@@ -1,8 +1,8 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.entity.Category;
 import com.CIC.shop_app_backend.repository.CategoryRepository;
-import com.CIC.shop_app_backend.services.Impl.ICategoryService;
+import com.CIC.shop_app_backend.services.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

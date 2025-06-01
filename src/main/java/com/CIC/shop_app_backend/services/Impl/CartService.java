@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.CartDTO;
 import com.CIC.shop_app_backend.entity.Cart;
@@ -6,11 +6,9 @@ import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.CartRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
-import com.CIC.shop_app_backend.services.Impl.ICartService;
+import com.CIC.shop_app_backend.services.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

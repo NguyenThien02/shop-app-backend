@@ -1,4 +1,4 @@
-package com.CIC.shop_app_backend.services;
+package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.dtos.CartItemsDTO;
 import com.CIC.shop_app_backend.entity.Cart;
@@ -8,8 +8,7 @@ import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.CartItemRepository;
 import com.CIC.shop_app_backend.repository.CartRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
-import com.CIC.shop_app_backend.services.Impl.ICartItemService;
-import jakarta.transaction.Transactional;
+import com.CIC.shop_app_backend.services.ICartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

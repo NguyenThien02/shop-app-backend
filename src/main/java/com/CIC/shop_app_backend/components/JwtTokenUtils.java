@@ -24,7 +24,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtTokenUtils {
 
-//    private String securityKey = generateSecretKey();
+//  private String securityKey = generateSecretKey();
     @Value("${jwt.securityKey}")
     private String securityKey;
 
