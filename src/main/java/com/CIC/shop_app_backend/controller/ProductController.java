@@ -6,7 +6,9 @@ import com.CIC.shop_app_backend.entity.Product;
 import com.CIC.shop_app_backend.responses.ListProductResponse;
 import com.CIC.shop_app_backend.responses.MessageResponse;
 import com.CIC.shop_app_backend.responses.ProductResponse;
+import com.CIC.shop_app_backend.services.IProductRedisService;
 import com.CIC.shop_app_backend.services.IProductService;
+import com.CIC.shop_app_backend.services.Impl.ProductRedisService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -37,12 +39,13 @@ import java.util.UUID;
 public class ProductController {
     private final IProductService productService;
     private final ObjectMapper objectMapper;
+    private final IProductRedisService productRedisService;
 
     @GetMapping("/by-category")
     public ResponseEntity<?> getProductByCategory(
             @RequestParam("page") int page,
             @RequestParam("limit") int limit,
-            @RequestParam(defaultValue = "0", name = "category_id") Long category_id
+            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId
     ) {
         try {
             PageRequest pageRequest = PageRequest.of(
@@ -50,14 +53,23 @@ public class ProductController {
                     limit,
                     Sort.by("productId").descending()
             );
-            Page<Product> productPage = productService.getByProductCategory(pageRequest, category_id);
+            ListProductResponse listProductResponse = productRedisService
+                    .getProductByCategory(categoryId, pageRequest);
 
-            Page<ProductResponse> productResponses = productPage.map(product -> ProductResponse.fromProduct(product));
-            List<ProductResponse> productResponseList = productResponses.getContent();
-            return ResponseEntity.ok(ListProductResponse.builder()
-                    .productResponse(productResponseList)
-                    .totalPages(productResponses.getTotalPages())
-                    .build());
+            if(listProductResponse == null){
+                Page<Product> productPage = productService.getByProductCategory(pageRequest, categoryId);
+                Page<ProductResponse> productPageResponse = productPage.map(product -> ProductResponse.fromProduct(product));
+                List<ProductResponse> productResponses = productPageResponse.getContent();
+                int totalPages = productPageResponse.getTotalPages();
+                listProductResponse = ListProductResponse.builder()
+                        .productResponse(productResponses)
+                        .totalPages(productPageResponse.getTotalPages())
+                        .build();
+                productRedisService.saveAllProducts(listProductResponse,categoryId,pageRequest);
+            }
+
+
+            return ResponseEntity.ok(listProductResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -154,9 +166,9 @@ public class ProductController {
     ) {
         try {
             Product product = productService.getProductDetail(productId);
-//            ProductResponse productRepository = ProductResponse.fromProduct(product);
+            ProductResponse productRepository = ProductResponse.fromProduct(product);
 
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(productRepository);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
