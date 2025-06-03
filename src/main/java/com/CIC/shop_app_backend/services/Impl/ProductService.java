@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public Product createProduct(ProductDTO productDTO) {
         if(!categoryRepository.existsById(productDTO.getCategoryId())){
             throw new DataNotFoundException("Category does not exist");
@@ -60,7 +62,6 @@ public class ProductService implements IProductService {
         return null;
     }
 
-    @Cacheable(value = "products", key = "#productId")
     public Product getProductDetail(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Not found product by ID: " + productId));

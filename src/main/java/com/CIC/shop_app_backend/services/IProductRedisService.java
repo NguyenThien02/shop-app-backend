@@ -17,4 +17,6 @@ public interface IProductRedisService {
     void saveAllProducts(ListProductResponse listProductResponse,
                          Long categoryId,
                          PageRequest pageRequest) throws JsonProcessingException;
+
+    void clear();
 }

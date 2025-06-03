@@ -46,4 +46,9 @@ public class ProductRedisService implements IProductRedisService {
         String json = redisObjectMapper.writeValueAsString(listProductResponse);
         redisTemplate.opsForValue().set(key, json);
     }
+
+    @Override
+    public void clear() {
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+    }
 }
