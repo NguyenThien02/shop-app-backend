@@ -11,6 +11,7 @@ import com.CIC.shop_app_backend.repository.UserRepository;
 import com.CIC.shop_app_backend.responses.UserResponse;
 import com.CIC.shop_app_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,8 @@ public class ProductService implements IProductService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    @Override
     public Page<Product> getByProductCategory(PageRequest pageRequest, Long categoryId) {
-
-        return productRepository.findProductsByCategory(categoryId,pageRequest );
+        return productRepository.findProductsByCategory(categoryId, pageRequest);
     }
 
     @Override
@@ -61,7 +60,7 @@ public class ProductService implements IProductService {
         return null;
     }
 
-    @Override
+    @Cacheable(value = "products", key = "#productId")
     public Product getProductDetail(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Not found product by ID: " + productId));

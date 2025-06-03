@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -26,9 +27,15 @@ spring:
     port: 5672
     username: guest
     password: guest
+
+  redis:
+    host: localhost
+    port: 6379
+
 api:
   prefix: api/v1/shop-app
 
 jwt:
   expiration: 2592000
   securityKey: Dm2Atabz2nObWsHxeeoIBZnqC8lWTYLFoMC/Hr3E7s4=
+

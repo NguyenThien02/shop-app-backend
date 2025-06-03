@@ -28,7 +28,6 @@ public class OrderDetailController {
     private final IOrderDetailService orderDetailService;
 
     @Autowired
-    // Tiêm phụ thuộc RabbitTemplate, công cụ gửi/nhận message qua RabbitMQ.
     private RabbitTemplate rabbitTemplate;
 
 
@@ -38,7 +37,7 @@ public class OrderDetailController {
     ){
         try {
             rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE,RabbitMQConfig.ROUTING_KEY,orderDetailDTO);
-            return ResponseEntity.ok(new MessageResponse("Đang xử lý đơn hàng",true));
+            return ResponseEntity.ok(new MessageResponse("Đang xử lý đơn hàng ",true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

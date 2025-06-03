@@ -154,9 +154,9 @@ public class ProductController {
     ) {
         try {
             Product product = productService.getProductDetail(productId);
-            ProductResponse productRepository = ProductResponse.fromProduct(product);
+//            ProductResponse productRepository = ProductResponse.fromProduct(product);
 
-            return ResponseEntity.ok(productRepository);
+            return ResponseEntity.ok(null);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
