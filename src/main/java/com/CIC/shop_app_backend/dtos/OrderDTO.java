@@ -16,7 +16,11 @@ import lombok.Setter;
 public class OrderDTO {
     @JsonProperty("user_id")
     @NotNull(message = "User ID is required")
-    private Long userId; // Sử dụng Long cho ID người dùng
+    private Long userId;
+
+    @JsonProperty("seller_id")
+    @NotNull(message = "Seller ID is required")
+    private Long sellerId;
 
     @JsonProperty("shipping_addres")
     @NotBlank(message = "Shipping address is required")

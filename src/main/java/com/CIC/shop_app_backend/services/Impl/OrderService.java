@@ -21,10 +21,14 @@ public class OrderService implements IOrderService {
     @Override
     public Order createOrder(OrderDTO orderDTO) {
         User user = userRepository.findById(orderDTO.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("Not found user with id: " + orderDTO.getUserId()));
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người dùng có id: " + orderDTO.getUserId()));
+
+        User seller = userRepository.findById(orderDTO.getSellerId())
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người bán có id" + orderDTO.getSellerId()));
 
         Order orderNew = new Order();
         orderNew.setUser(user);
+        orderNew.setSeller(seller);
         orderNew.setTotalAmount(orderDTO.getTotalAmount());
         orderNew.setShippingAddress(orderDTO.getShippingAddress());
         orderNew.setNotes(orderDTO.getNotes());

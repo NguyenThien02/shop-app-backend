@@ -20,6 +20,9 @@ public class OrderResponse {
     @JsonProperty("user_response")
     private UserResponse userResponse;
 
+    @JsonProperty("seller_response")
+    private UserResponse sellerResponse;
+
     @JsonProperty("order_date")
     private LocalDate orderDate;
 
@@ -41,6 +44,7 @@ public class OrderResponse {
         return OrderResponse.builder()
                 .orderId(order.getOrderId())
                 .userResponse(UserResponse.fromUser(order.getUser()))
+                .sellerResponse(UserResponse.fromUser(order.getSeller()))
                 .orderDate(order.getOrderDate())
                 .totalAmount(order.getTotalAmount())
                 .shippingAddress(order.getShippingAddress())
