@@ -19,8 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -53,7 +52,6 @@ public class WebSecurityConfig {
                             .requestMatchers(GET,
                                     String.format("%s/users/**", apiPrefix)).permitAll()
 
-
                             .requestMatchers(GET,
                                     String.format("%s/products/**", apiPrefix)).permitAll()
                             .requestMatchers(POST,
@@ -73,8 +71,12 @@ public class WebSecurityConfig {
                                     String.format("%s/cart-item/**", apiPrefix)).hasRole(Role.USER)
 
 
-                            .requestMatchers(
-                                    String.format("%s/orders/**", apiPrefix)).permitAll()
+                            .requestMatchers(GET,
+                                    String.format("%s/orders/by-user-id**", apiPrefix)).hasRole(Role.USER)
+                            .requestMatchers(GET,
+                                    String.format("%s/orders/by-seller-id**", apiPrefix)).hasRole(Role.SELLER)
+                            .requestMatchers(PUT,
+                                    String.format("%s/orders/update-order-status**", apiPrefix)).hasRole(Role.SELLER)
 
                             .requestMatchers(
                                     String.format("%s/order-details/**", apiPrefix)).permitAll()

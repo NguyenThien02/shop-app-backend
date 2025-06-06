@@ -3,6 +3,7 @@ package com.CIC.shop_app_backend.services.Impl;
 import com.CIC.shop_app_backend.dtos.OrderDTO;
 import com.CIC.shop_app_backend.entity.Order;
 import com.CIC.shop_app_backend.entity.User;
+import com.CIC.shop_app_backend.entity.enums.OrderStatus;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
@@ -10,6 +11,7 @@ import com.CIC.shop_app_backend.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,9 +45,23 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public Page<Order> getOrderBySellerId(Long sellerId, PageRequest pageRequest) {
+        Page<Order> orderPage = orderRepository.findBySeller_UserId(sellerId, pageRequest);
+        return orderPage;
+    }
+
+    @Override
     public Order getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy order với ID: " + orderId));
         return order;
+    }
+
+    @Override
+    public Order updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy order với ID: " + orderId));
+        order.setOrderStatus(orderStatus);
+        return orderRepository.save(order);
     }
 }
