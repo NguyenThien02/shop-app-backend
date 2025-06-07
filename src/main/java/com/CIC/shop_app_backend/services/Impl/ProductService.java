@@ -57,11 +57,15 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(ProductDTO productDTO) {
-
-        return null;
+    public Product updateStockQuantityProduct(Long productId, Long quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy sản phẩm có ID: " + productId));
+        Long newStockQuantity = product.getStockQuantity() - quantity;
+        product.setStockQuantity(newStockQuantity);
+        return productRepository.save(product);
     }
 
+    @Override
     public Product getProductDetail(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Not found product by ID: " + productId));
