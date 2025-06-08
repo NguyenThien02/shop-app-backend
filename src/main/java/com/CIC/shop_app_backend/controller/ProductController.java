@@ -56,7 +56,7 @@ public class ProductController {
             ListProductResponse listProductResponse = productRedisService
                     .getProductByCategory(categoryId, pageRequest);
 
-            if(listProductResponse == null){
+            if (listProductResponse == null) {
                 Page<Product> productPage = productService.getByProductCategory(pageRequest, categoryId);
                 Page<ProductResponse> productPageResponse = productPage.map(product -> ProductResponse.fromProduct(product));
                 List<ProductResponse> productResponses = productPageResponse.getContent();
@@ -65,7 +65,7 @@ public class ProductController {
                         .productResponse(productResponses)
                         .totalPages(productPageResponse.getTotalPages())
                         .build();
-                productRedisService.saveAllProducts(listProductResponse,categoryId,pageRequest);
+                productRedisService.saveAllProducts(listProductResponse, categoryId, pageRequest);
             }
 
 
@@ -174,30 +174,33 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/upload-file-products")
-    public ResponseEntity<?> uploadFileProducts(@RequestParam("fileProduct") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("File is empty.");
-        }
+    @GetMapping("{seller-id}")
 
-        String fileName = file.getOriginalFilename();
-        if (fileName == null) {
-            return ResponseEntity.badRequest().body("Invalid file.");
-        }
-
+    @PostMapping("/upload-file-products/{seller-id}")
+    public ResponseEntity<?> uploadFileProducts(
+            @RequestParam("fileProduct") MultipartFile file,
+            @PathVariable("seller-id") Long sellerId) {
         try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("Tập tin trống.");
+            }
+
+            String fileName = file.getOriginalFilename();
+            if (fileName == null) {
+                return ResponseEntity.badRequest().body("Tệp không hợp lệ.");
+            }
             if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")) {
-                processExcel(file.getInputStream());
-                return ResponseEntity.ok(new MessageResponse("File uploaded and processed successfully.",true));
+                processExcel(file.getInputStream(), sellerId);
+                return ResponseEntity.ok(new MessageResponse("Tệp đã được tải lên và xử lý thành công.", true));
             } else {
-                return ResponseEntity.badRequest().body("Only CSV or Excel files are supported.");
+                return ResponseEntity.badRequest().body("Chỉ hỗ trợ tệp CSV hoặc Excel.");
             }
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Failed to process file: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
-    private void processExcel(InputStream inputStream) throws IOException {
+    private void processExcel(InputStream inputStream, Long sellerId) throws IOException {
         List<ProductDTO> listProductDTO = new ArrayList<>();
         Workbook workbook = WorkbookFactory.create(inputStream);
 
@@ -223,12 +226,12 @@ public class ProductController {
             productDTO.setStockQuantity(getCellLong(row.getCell(3)));
             productDTO.setImageUrl(getCellString(row.getCell(4)));
             productDTO.setCategoryId(getCellLong(row.getCell(5)));
-            productDTO.setSellerId(getCellLong(row.getCell(6)));
+            productDTO.setSellerId(sellerId);
 
             listProductDTO.add(productDTO);
         }
 
-        for (ProductDTO productDTO : listProductDTO){
+        for (ProductDTO productDTO : listProductDTO) {
             productService.createProduct(productDTO);
         }
         workbook.close();

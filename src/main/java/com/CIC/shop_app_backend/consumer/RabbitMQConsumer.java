@@ -25,7 +25,6 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void consumer(OrderDetailDTO orderDetailDTO) {
         try {
-            // Gây lỗi giả để test DLQ:
             if (orderDetailDTO.getOrderId() == null) {
                 throw new IllegalArgumentException("OrderId không được null");
             }

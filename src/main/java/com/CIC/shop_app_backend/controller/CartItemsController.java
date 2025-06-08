@@ -68,7 +68,7 @@ public class CartItemsController {
     ){
         try {
             cartItemService.deleteCartItemById(cartItemId);
-            String message = "Delete successful with cart item Id: " + cartItemId;
+            String message = "Xóa thành công với ID mục giỏ hàng cart item Id: " + cartItemId;
             return ResponseEntity.ok(new MessageResponse(message,true));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

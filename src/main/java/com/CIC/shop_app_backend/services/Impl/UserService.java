@@ -34,10 +34,10 @@ public class UserService implements IUserService {
     public User registerUser(UserRegisterDTO userRegisterDTO) {
         String phoneNumber = userRegisterDTO.getPhoneNumber();
         if(userRepository.existsByPhoneNumber(phoneNumber)){
-            throw new DataIntegrityViolationException("Phone number already exists");
+            throw new DataIntegrityViolationException("Số điện thoại đã tồn tại");
         }
         Role newRole = roleRepository.findById(userRegisterDTO.getRoleId())
-                .orElseThrow(() -> new DataNotFoundException("Role not found"));
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy vai trò"));
         User newUser = User.builder()
                 .fullName(userRegisterDTO.getFullName())
                 .phoneNumber((userRegisterDTO.getPhoneNumber()))
