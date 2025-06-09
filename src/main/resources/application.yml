@@ -39,3 +39,9 @@ jwt:
   expiration: 2592000
   securityKey: Dm2Atabz2nObWsHxeeoIBZnqC8lWTYLFoMC/Hr3E7s4=
 
+openapi:
+  service:
+    api-docs: backend-service
+    server: http://localhost:${server.port}/${api.prefix}
+    title: Backend service
+    version: 1.0.0

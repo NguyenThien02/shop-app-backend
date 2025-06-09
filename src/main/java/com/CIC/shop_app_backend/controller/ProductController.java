@@ -160,7 +160,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("{product-id}")
+    @GetMapping("by-product-id/{product-id}")
     public ResponseEntity<?> getProductDetail(
             @PathVariable("product-id") Long productId
     ) {
@@ -174,7 +174,28 @@ public class ProductController {
         }
     }
 
-    @GetMapping("{seller-id}")
+    @GetMapping("/by-seller-id/{sellerId}")
+    public ResponseEntity<?> getProductBySellerId(
+            @PathVariable Long sellerId,
+            @ModelAttribute PaginationRequest paginationRequest
+    ){
+        try {
+            PageRequest pageRequest = PageRequest.of(
+                    paginationRequest.getPage(),
+                    paginationRequest.getLimit(),
+                    Sort.by("productId").descending()
+            );
+            Page<Product> productPage = productService.getProductBySellerId(pageRequest, sellerId);
+            Page<ProductResponse> productResponses = productPage.map(product -> ProductResponse.fromProduct(product));
+            List<ProductResponse> productResponseList = productResponses.getContent();
+            return ResponseEntity.ok(ListProductResponse.builder()
+                    .productResponse(productResponseList)
+                    .totalPages(productResponses.getTotalPages())
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/upload-file-products/{seller-id}")
     public ResponseEntity<?> uploadFileProducts(

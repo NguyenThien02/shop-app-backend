@@ -15,4 +15,6 @@ public interface IProductService {
 
     Product getProductDetail(Long productId);
 
+    Page<Product> getProductBySellerId(PageRequest pageRequest, Long sellerId);
+
 }

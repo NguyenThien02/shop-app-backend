@@ -68,7 +68,13 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductDetail(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new DataNotFoundException("Not found product by ID: " + productId));
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy sản phẩm có ID: " + productId));
         return product;
+    }
+
+    @Override
+    public Page<Product> getProductBySellerId(PageRequest pageRequest, Long sellerId) {
+
+        return productRepository.findBySellerUserId(sellerId, pageRequest);
     }
 }
