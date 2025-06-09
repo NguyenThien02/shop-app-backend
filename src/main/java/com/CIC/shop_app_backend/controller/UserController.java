@@ -1,5 +1,6 @@
 package com.CIC.shop_app_backend.controller;
 
+import com.CIC.shop_app_backend.components.LoggerUtils;
 import com.CIC.shop_app_backend.dtos.UserLoginDTO;
 import com.CIC.shop_app_backend.dtos.UserRegisterDTO;
 import com.CIC.shop_app_backend.entity.User;
@@ -23,14 +24,19 @@ public class UserController {
             @Valid @RequestBody UserRegisterDTO userRegisterDTO
     ){
         try{
+            LoggerUtils.logInfo("Đang cố gắng đăng ký người dùng mới bằng số điện thoại: " + userRegisterDTO.getPhoneNumber());
+
             if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRetypePassword())) {
-                return ResponseEntity.badRequest().body("Password does not match");
+                LoggerUtils.logWarn("Mật khẩu không khớp để đăng ký người dùng: " + userRegisterDTO.getPhoneNumber());
+                return ResponseEntity.badRequest().body("Mật khẩu không khớp");
             }
             User user = userService.registerUser(userRegisterDTO);
             UserResponse userResponse = UserResponse.fromUser(user);
+            LoggerUtils.logInfo("Người dùng đã đăng ký thành công: " + user.getPhoneNumber());
             return ResponseEntity.ok(userResponse);
         }
         catch (Exception e){
+            LoggerUtils.logError("Lỗi đăng ký người dùng: " + userRegisterDTO.getPhoneNumber(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -40,10 +46,15 @@ public class UserController {
             @Valid @RequestBody UserLoginDTO userLoginDTO
             ){
         try {
+            LoggerUtils.logInfo("Đang cố gắng đăng nhập người dùng bằng số điện thoại: " + userLoginDTO.getPhoneNumber());
             String token = userService.loginUser(userLoginDTO);
             User user = userService.getUserByPhoneNumber(userLoginDTO.getPhoneNumber());
+
             UserResponse userResponse = UserResponse.fromUser(user);
             LoginResponse loginResponse = new LoginResponse(userResponse, token);
+
+            LoggerUtils.logInfo("Đăng nhập thành công người dùng bằng số điện thoại: " + userLoginDTO.getPhoneNumber());
+
             return ResponseEntity.ok(loginResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
