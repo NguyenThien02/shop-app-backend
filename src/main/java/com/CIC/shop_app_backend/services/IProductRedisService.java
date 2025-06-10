@@ -12,11 +12,12 @@ import java.util.List;
 public interface IProductRedisService {
 
     ListProductResponse getProductByCategory(
-            Long categoryId, PageRequest pageRequest) throws JsonProcessingException;
+            Long categoryId, PageRequest pageRequest, String keyWord) throws JsonProcessingException;
 
     void saveAllProducts(ListProductResponse listProductResponse,
                          Long categoryId,
-                         PageRequest pageRequest) throws JsonProcessingException;
+                         PageRequest pageRequest,
+                         String keyWord) throws JsonProcessingException;
 
     void clear();
 }

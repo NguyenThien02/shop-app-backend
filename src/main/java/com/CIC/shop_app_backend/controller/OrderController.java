@@ -9,7 +9,6 @@ import com.CIC.shop_app_backend.responses.OrderResponse;
 import com.CIC.shop_app_backend.services.IOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,10 +26,12 @@ public class OrderController {
 
     @PostMapping("/create")
     public ResponseEntity<?> placeOrder(
-            @Valid @RequestBody OrderDTO orderDTO
+            @Valid @RequestBody OrderDTO orderDTO,
+            @RequestHeader("Authorization") String token
     ){
         try {
-            Order order = orderService.createOrder(orderDTO);
+            String extractedToken = token.substring(7);
+            Order order = orderService.createOrder(orderDTO, extractedToken);
             OrderResponse orderResponse = OrderResponse.fromOrder(order);
             return ResponseEntity.ok(orderResponse);
         } catch (Exception e) {

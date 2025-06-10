@@ -1,9 +1,11 @@
 package com.CIC.shop_app_backend.services.Impl;
 
+import com.CIC.shop_app_backend.components.JwtTokenUtils;
 import com.CIC.shop_app_backend.dtos.OrderDTO;
 import com.CIC.shop_app_backend.entity.Order;
 import com.CIC.shop_app_backend.entity.User;
 import com.CIC.shop_app_backend.entity.enums.OrderStatus;
+import com.CIC.shop_app_backend.exceptions.DataInvalidParamException;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
@@ -11,7 +13,6 @@ import com.CIC.shop_app_backend.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,11 +20,18 @@ import org.springframework.stereotype.Service;
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @Override
-    public Order createOrder(OrderDTO orderDTO) {
+    public Order createOrder(OrderDTO orderDTO, String extractedToken) {
         User user = userRepository.findById(orderDTO.getUserId())
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người dùng có id: " + orderDTO.getUserId()));
+
+        Long userIdIntoken = jwtTokenUtils.extractUserId(extractedToken);
+
+        if(userIdIntoken != user.getUserId()){
+            throw new DataInvalidParamException("Người dùng không có quyền tạo đơn hàng cho người khác");
+        }
 
         User seller = userRepository.findById(orderDTO.getSellerId())
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người bán có id" + orderDTO.getSellerId()));

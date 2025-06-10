@@ -23,26 +23,27 @@ public class ProductRedisService implements IProductRedisService {
     private final ObjectMapper redisObjectMapper;
 
     private String getKeyFrom(Long categoryId,
-                              PageRequest pageRequest) {
+                              PageRequest pageRequest, String keyWord) {
         int pageNumber = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
-        return  String.format("all_products:category:%d, page:%d, size:%d", categoryId, pageNumber, pageSize);
+        return String.format("all_products:category:%d, page:%d, size:%d, keyWord:%s", categoryId, pageNumber, pageSize, keyWord);
     }
 
     @Override
-    public ListProductResponse getProductByCategory(Long categoryId, PageRequest pageRequest) throws JsonProcessingException {
-        String key = this.getKeyFrom(categoryId, pageRequest);
+    public ListProductResponse getProductByCategory(Long categoryId, PageRequest pageRequest, String keyWord) throws JsonProcessingException {
+        String key = this.getKeyFrom(categoryId, pageRequest, keyWord);
         String json = (String) redisTemplate.opsForValue().get(key);
         ListProductResponse productResponses =
                 json != null ?
-                        redisObjectMapper.readValue(json, new TypeReference<ListProductResponse>() {})
+                        redisObjectMapper.readValue(json, new TypeReference<ListProductResponse>() {
+                        })
                         : null;
         return productResponses;
     }
 
     @Override
-    public void saveAllProducts(ListProductResponse listProductResponse,Long categoryId, PageRequest pageRequest) throws JsonProcessingException {
-        String key = this.getKeyFrom(categoryId, pageRequest);
+    public void saveAllProducts(ListProductResponse listProductResponse, Long categoryId, PageRequest pageRequest, String keyWord) throws JsonProcessingException {
+        String key = this.getKeyFrom(categoryId, pageRequest, keyWord);
         String json = redisObjectMapper.writeValueAsString(listProductResponse);
         redisTemplate.opsForValue().set(key, json);
     }

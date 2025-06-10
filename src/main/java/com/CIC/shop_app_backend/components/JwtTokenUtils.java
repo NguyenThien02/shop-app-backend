@@ -41,6 +41,7 @@ public class JwtTokenUtils {
     public String generateToken(User user) throws DataInvalidParamException {
         Map<String, Object> claims = new HashMap<>();
         claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("userId", user.getUserId());
 //        generateSecretKey();
         try{
             String toke = Jwts.builder()
@@ -83,6 +84,11 @@ public class JwtTokenUtils {
     // Trích xuất ra phoneNumber
     public String extractPhoneNumber(String token){
         return extractClaim(token, Claims::getSubject);
+    }
+
+    // Trích xuất ra userId
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     public boolean validateToken(String token, UserDetails userDetails){

@@ -4,7 +4,6 @@ import com.CIC.shop_app_backend.config.RabbitMQConfig;
 import com.CIC.shop_app_backend.dtos.OrderDetailDTO;
 import com.CIC.shop_app_backend.dtos.PaginationRequest;
 import com.CIC.shop_app_backend.entity.OrderDetail;
-import com.CIC.shop_app_backend.repository.OrderDetailRepository;
 import com.CIC.shop_app_backend.responses.ListOrderDetailResponse;
 import com.CIC.shop_app_backend.responses.MessageResponse;
 import com.CIC.shop_app_backend.responses.OrderDetailResponse;

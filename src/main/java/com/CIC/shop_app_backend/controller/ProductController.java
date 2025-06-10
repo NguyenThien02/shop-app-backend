@@ -45,7 +45,8 @@ public class ProductController {
     public ResponseEntity<?> getProductByCategory(
             @RequestParam("page") int page,
             @RequestParam("limit") int limit,
-            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId
+            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+            @RequestParam(defaultValue = "", name = "key_word") String keyWord
     ) {
         try {
             PageRequest pageRequest = PageRequest.of(
@@ -54,10 +55,10 @@ public class ProductController {
                     Sort.by("productId").descending()
             );
             ListProductResponse listProductResponse = productRedisService
-                    .getProductByCategory(categoryId, pageRequest);
+                    .getProductByCategory(categoryId, pageRequest, keyWord);
 
             if (listProductResponse == null) {
-                Page<Product> productPage = productService.getByProductCategory(pageRequest, categoryId);
+                Page<Product> productPage = productService.getByProductCategory(pageRequest, categoryId, keyWord);
                 Page<ProductResponse> productPageResponse = productPage.map(product -> ProductResponse.fromProduct(product));
                 List<ProductResponse> productResponses = productPageResponse.getContent();
                 int totalPages = productPageResponse.getTotalPages();
@@ -65,7 +66,7 @@ public class ProductController {
                         .productResponse(productResponses)
                         .totalPages(productPageResponse.getTotalPages())
                         .build();
-                productRedisService.saveAllProducts(listProductResponse, categoryId, pageRequest);
+                productRedisService.saveAllProducts(listProductResponse, categoryId, pageRequest, keyWord);
             }
 
 
@@ -86,7 +87,7 @@ public class ProductController {
                     paginationRequest.getLimit(),
                     Sort.by("stockQuantity").ascending()
             );
-            Page<Product> productPage = productService.getByProductCategory(pageRequest, category_id);
+            Page<Product> productPage = productService.getByProductCategory(pageRequest, category_id, "");
             Page<ProductResponse> productResponses = productPage.map(product -> ProductResponse.fromProduct(product));
             List<ProductResponse> productResponseList = productResponses.getContent();
             return ResponseEntity.ok(ListProductResponse.builder()

@@ -27,7 +27,7 @@ public class UserController {
             LoggerUtils.logInfo("Đang cố gắng đăng ký người dùng mới bằng số điện thoại: " + userRegisterDTO.getPhoneNumber());
 
             if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getRetypePassword())) {
-                LoggerUtils.logWarn("Mật khẩu không khớp để đăng ký người dùng: " + userRegisterDTO.getPhoneNumber());
+                LoggerUtils.logWarn("Mật khẩu không khớp để đăng ký người dùng: " , userRegisterDTO.getPhoneNumber());
                 return ResponseEntity.badRequest().body("Mật khẩu không khớp");
             }
             User user = userService.registerUser(userRegisterDTO);

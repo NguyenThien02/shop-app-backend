@@ -16,7 +16,7 @@ public class LoggerUtils {
         logger.error(message, throwable);
     }
 
-    public static void logWarn(String message) {
+    public static void logWarn(String message, String phoneNumber) {
         logger.warn(message);
     }
 }

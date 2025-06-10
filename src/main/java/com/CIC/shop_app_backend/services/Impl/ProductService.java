@@ -25,8 +25,8 @@ public class ProductService implements IProductService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    public Page<Product> getByProductCategory(PageRequest pageRequest, Long categoryId) {
-        return productRepository.findProductsByCategory(categoryId, pageRequest);
+    public Page<Product> getByProductCategory(PageRequest pageRequest, Long categoryId, String keyWord) {
+        return productRepository.findProductsByCategory(categoryId, keyWord, pageRequest);
     }
 
     @Override
@@ -74,7 +74,6 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<Product> getProductBySellerId(PageRequest pageRequest, Long sellerId) {
-
         return productRepository.findBySellerUserId(sellerId, pageRequest);
     }
 }
