@@ -42,6 +42,10 @@ public class Order extends BaseEntity{
     @Column(name = "shipping_address")
     private String shippingAddress;
 
+    @ManyToOne
+    @JoinColumn(name = "voucher_id")
+    private Voucher voucher;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 50)
     private OrderStatus orderStatus = OrderStatus.PENDING;
