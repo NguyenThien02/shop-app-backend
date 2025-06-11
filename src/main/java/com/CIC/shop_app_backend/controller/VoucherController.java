@@ -18,8 +18,8 @@ public class VoucherController {
     @PostMapping
     public ResponseEntity<?> createVoucher(@RequestBody VoucherDTO voucherDTO) {
         try {
-            Voucher created = voucherService.createVoucher(voucherDTO);
-            return ResponseEntity.ok(created);
+            Voucher voucher = voucherService.createVoucher(voucherDTO);
+            return ResponseEntity.ok(voucher);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -8,7 +8,6 @@ import com.CIC.shop_app_backend.responses.MessageResponse;
 import com.CIC.shop_app_backend.responses.ProductResponse;
 import com.CIC.shop_app_backend.services.IProductRedisService;
 import com.CIC.shop_app_backend.services.IProductService;
-import com.CIC.shop_app_backend.services.Impl.ProductRedisService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;

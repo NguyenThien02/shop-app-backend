@@ -4,6 +4,7 @@ import com.CIC.shop_app_backend.entity.enums.VoucherType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Voucher {
     private Double minOrderCost;
 
     @Column(name = "expiry_datetime")
-    private LocalDateTime expiryDatetime;
+    private LocalDate expiryDatetime;
 
     @Column(name = "limit_usage")
     private Integer limitUsage;

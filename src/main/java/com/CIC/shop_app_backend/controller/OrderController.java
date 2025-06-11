@@ -1,11 +1,13 @@
 package com.CIC.shop_app_backend.controller;
 
 import com.CIC.shop_app_backend.dtos.OrderDTO;
+import com.CIC.shop_app_backend.dtos.OrderDetailDTO;
 import com.CIC.shop_app_backend.dtos.PaginationRequest;
 import com.CIC.shop_app_backend.entity.Order;
 import com.CIC.shop_app_backend.entity.enums.OrderStatus;
 import com.CIC.shop_app_backend.responses.ListOrderResponse;
 import com.CIC.shop_app_backend.responses.OrderResponse;
+import com.CIC.shop_app_backend.services.IInventoryService;
 import com.CIC.shop_app_backend.services.IOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +24,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final IOrderService orderService;
+    private final IInventoryService inventoryService;
 
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createOrder(
+//            @Valid @RequestBody OrderDTO orderDTO,
+//            @RequestHeader("Authorization") String token
+//    ){
+//        try {
+//            String extractedToken = token.substring(7);
+//            Order order = orderService.createOrder(orderDTO, extractedToken);
+//            OrderResponse orderResponse = OrderResponse.fromOrder(order);
+//            return ResponseEntity.ok(orderResponse);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @PostMapping("/create")
-    public ResponseEntity<?> placeOrder(
+    public ResponseEntity<?> createOrder(
             @Valid @RequestBody OrderDTO orderDTO,
             @RequestHeader("Authorization") String token
     ){
         try {
+            for (OrderDetailDTO detailDTO : orderDTO.getOrderDetails()){
+                if(!inventoryService.checkInventory(detailDTO.getProductId(), detailDTO.getNumberOfProducts())){
+                    return ResponseEntity.badRequest().body("Không đủ hàng tron kho cho sản phẩm có ID: " + detailDTO.getProductId());
+                }
+            }
             String extractedToken = token.substring(7);
             Order order = orderService.createOrder(orderDTO, extractedToken);
             OrderResponse orderResponse = OrderResponse.fromOrder(order);

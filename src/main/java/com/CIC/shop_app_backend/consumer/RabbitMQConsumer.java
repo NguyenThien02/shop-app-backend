@@ -37,11 +37,7 @@ public class RabbitMQConsumer {
             double totalMoney = orderDetailDTO.getTotalMoney();
             double productPrice = product.getPrice();
 
-            if (productPrice == 0.0) {
-                throw new IllegalArgumentException("Giá sản phẩm không thể bằng 0");
-            }
-            Long quantity = Math.round(totalMoney / productPrice);
-            productService.updateStockQuantityProduct(orderDetailDTO.getProductId(),quantity);
+            productService.updateStockQuantityProduct(orderDetailDTO.getProductId(),orderDetailDTO.getNumberOfProducts());
             System.out.println("Cập nhật số lượng sản phẩm trong kho thành công");
 
         } catch (Exception e) {

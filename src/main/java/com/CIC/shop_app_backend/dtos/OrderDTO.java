@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,4 +35,10 @@ public class OrderDTO {
     @JsonProperty("notes")
     @Size(max = 4000, message = "Notes cannot exceed 4000 characters") // NVARCHAR(MAX) có thể rất dài, giới hạn ở DTO
     private String notes; // Tùy chọn, không cần @NotNull
+
+    @JsonProperty("voucher_id")
+    private Long voucherId;
+
+    @JsonProperty("order_details")
+    private List<OrderDetailDTO> orderDetails;
 }

@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,6 +19,6 @@ public class VoucherDTO {
     private Double amount;
     private String description;
     private Double minOrderCost;
-    private LocalDateTime expiryDatetime;
+    private LocalDate expiryDatetime;
     private Integer limitUsage;
 }

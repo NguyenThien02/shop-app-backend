@@ -30,5 +30,4 @@ public class OrderDetail {
 
     @Column(name = "total_money")
     private double totalMoney;
-
 }
