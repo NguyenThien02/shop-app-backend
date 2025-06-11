@@ -2,23 +2,33 @@ package com.CIC.shop_app_backend.services.Impl;
 
 import com.CIC.shop_app_backend.components.JwtTokenUtils;
 import com.CIC.shop_app_backend.dtos.OrderDTO;
+import com.CIC.shop_app_backend.dtos.OrderDetailDTO;
 import com.CIC.shop_app_backend.entity.Order;
+import com.CIC.shop_app_backend.entity.Product;
 import com.CIC.shop_app_backend.entity.User;
+import com.CIC.shop_app_backend.entity.Voucher;
 import com.CIC.shop_app_backend.entity.enums.OrderStatus;
+import com.CIC.shop_app_backend.entity.enums.VoucherType;
 import com.CIC.shop_app_backend.exceptions.DataInvalidParamException;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
 import com.CIC.shop_app_backend.repository.OrderRepository;
+import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
+import com.CIC.shop_app_backend.repository.VoucherRepository;
 import com.CIC.shop_app_backend.services.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
 
@@ -29,20 +39,41 @@ public class OrderService implements IOrderService {
 
         Long userIdIntoken = jwtTokenUtils.extractUserId(extractedToken);
 
-        if(userIdIntoken != user.getUserId()){
+        if (!Objects.equals(userIdIntoken, user.getUserId())) {
             throw new DataInvalidParamException("Người dùng không có quyền tạo đơn hàng cho người khác");
         }
 
         User seller = userRepository.findById(orderDTO.getSellerId())
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người bán có id" + orderDTO.getSellerId()));
 
+        Voucher voucher = new Voucher();
+
+        Double totalAmount = 0D;
+        for (OrderDetailDTO orderDetailDTO : orderDTO.getOrderDetails()) {
+            Product product = productRepository.findById(orderDetailDTO.getProductId())
+                    .orElseThrow(() -> new DataNotFoundException("Không tìm thấy sản phẩm có ID: " + orderDetailDTO.getProductId()));
+            totalAmount += product.getPrice() * orderDetailDTO.getNumberOfProducts();
+        }
+        if(orderDTO.getVoucherId() != null) {
+            voucher = voucherRepository.findById(orderDTO.getVoucherId())
+                    .orElseThrow(() -> new DataNotFoundException("Không tìm thấy voucher có ID" + orderDTO.getVoucherId()));
+            if(voucher.getType() == VoucherType.FIXED){
+                totalAmount = totalAmount - voucher.getAmount();
+            }else if(voucher.getType() == VoucherType.PERCENTAGE){
+                totalAmount = totalAmount * (voucher.getAmount() / 100.0);
+            }
+        }
+        else{
+            voucher = null;
+        }
+
         Order orderNew = new Order();
         orderNew.setUser(user);
         orderNew.setSeller(seller);
-        orderNew.setTotalAmount(orderDTO.getTotalAmount());
         orderNew.setShippingAddress(orderDTO.getShippingAddress());
+        orderNew.setVoucher(voucher);
+        orderNew.setTotalAmount(totalAmount);
         orderNew.setNotes(orderDTO.getNotes());
-
         return orderRepository.save(orderNew);
     }
 

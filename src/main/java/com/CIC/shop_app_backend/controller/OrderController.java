@@ -1,7 +1,9 @@
 package com.CIC.shop_app_backend.controller;
 
+import com.CIC.shop_app_backend.config.RabbitMQConfig;
 import com.CIC.shop_app_backend.dtos.OrderDTO;
 import com.CIC.shop_app_backend.dtos.OrderDetailDTO;
+import com.CIC.shop_app_backend.dtos.OrderRequestDTO;
 import com.CIC.shop_app_backend.dtos.PaginationRequest;
 import com.CIC.shop_app_backend.entity.Order;
 import com.CIC.shop_app_backend.entity.enums.OrderStatus;
@@ -9,11 +11,14 @@ import com.CIC.shop_app_backend.responses.ListOrderResponse;
 import com.CIC.shop_app_backend.responses.OrderResponse;
 import com.CIC.shop_app_backend.services.IInventoryService;
 import com.CIC.shop_app_backend.services.IOrderService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +30,8 @@ import java.util.List;
 public class OrderController {
     private final IOrderService orderService;
     private final IInventoryService inventoryService;
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
 //    @PostMapping("/create")
 //    public ResponseEntity<?> createOrder(
@@ -47,15 +54,18 @@ public class OrderController {
             @RequestHeader("Authorization") String token
     ){
         try {
+
             for (OrderDetailDTO detailDTO : orderDTO.getOrderDetails()){
                 if(!inventoryService.checkInventory(detailDTO.getProductId(), detailDTO.getNumberOfProducts())){
-                    return ResponseEntity.badRequest().body("Không đủ hàng tron kho cho sản phẩm có ID: " + detailDTO.getProductId());
+                    return ResponseEntity.badRequest().body("Không đủ hàng trong kho cho sản phẩm có ID: " + detailDTO.getProductId());
                 }
             }
             String extractedToken = token.substring(7);
-            Order order = orderService.createOrder(orderDTO, extractedToken);
-            OrderResponse orderResponse = OrderResponse.fromOrder(order);
-            return ResponseEntity.ok(orderResponse);
+            OrderRequestDTO orderRequestDTO = new OrderRequestDTO(orderDTO, extractedToken);
+            String jsonString = objectMapper.writeValueAsString(orderRequestDTO);
+
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE,RabbitMQConfig.ROUTING_KEY,jsonString);
+            return ResponseEntity.ok("orderResponse");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

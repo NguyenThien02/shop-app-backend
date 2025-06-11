@@ -26,21 +26,20 @@ import java.util.List;
 public class OrderDetailController {
     private final IOrderDetailService orderDetailService;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
 
-    @PostMapping("create")
-    public ResponseEntity<?> createOrderDetail(
-            @Valid @RequestBody OrderDetailDTO orderDetailDTO
-    ){
-        try {
-            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE,RabbitMQConfig.ROUTING_KEY,orderDetailDTO);
-            return ResponseEntity.ok(new MessageResponse("Đang xử lý đơn hàng ",true));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+//    @PostMapping("create")
+//    public ResponseEntity<?> createOrderDetail(
+//            @Valid @RequestBody OrderDetailDTO orderDetailDTO
+//    ){
+//        try {
+//            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE,RabbitMQConfig.ROUTING_KEY,orderDetailDTO);
+//            return ResponseEntity.ok(new MessageResponse("Đang xử lý đơn hàng ",true));
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @GetMapping("{order-id}")
     public ResponseEntity<?> getOrderDetailByOrderId(

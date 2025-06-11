@@ -13,5 +13,4 @@ import lombok.Setter;
 public class OrderDetailDTO {
     private Long productId;
     private Long numberOfProducts;
-    private Double totalMoney;
 }

@@ -27,7 +27,4 @@ public class OrderDetail {
 
     @Column(name = "number_of_products")
     private Long numberOfProducts;
-
-    @Column(name = "total_money")
-    private double totalMoney;
 }

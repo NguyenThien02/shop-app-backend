@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 public interface IOrderDetailService {
-    OrderDetail createOrderDetail(OrderDetailDTO orderDetailDTO);
+    OrderDetail createOrderDetail(OrderDetailDTO orderDetailDTO, Long orderId);
 
     Page<OrderDetail> getOrderDetailByOrderId(Long orderId, PageRequest pageRequest);
 }

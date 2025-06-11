@@ -29,9 +29,6 @@ public class OrderDTO {
     @Size(max = 500, message = "Shipping address cannot exceed 500 characters")
     private String shippingAddress;
 
-    @JsonProperty("total_amount")
-    private Double totalAmount;
-
     @JsonProperty("notes")
     @Size(max = 4000, message = "Notes cannot exceed 4000 characters") // NVARCHAR(MAX) có thể rất dài, giới hạn ở DTO
     private String notes; // Tùy chọn, không cần @NotNull

@@ -24,16 +24,6 @@ public class RabbitMQConfig {
     public static final String DLX = "rabbit_mq_dlx";
     public static final String DLQ_ROUTING_KEY = "rabbit_mq_dlq_r_key";
 
-//    @Bean
-//    public Queue queue(){
-//        return new Queue(QUEUE);
-//    }
-//
-//    @Bean
-//    public DirectExchange directExchange(){
-//        return new DirectExchange(EXCHANGE);
-//    }
-
     // DLQ Queue
     @Bean
     public Queue deadLetterQueue() {
@@ -84,18 +74,18 @@ public class RabbitMQConfig {
     }
 
 
-    //RabbitMQ sử dụng JSON cho message.
-    @Bean
-    public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();
-    }
-
-    // gửi/nhận message RabbitMQ với JSON converter.
-    @Bean
-    public AmqpTemplate getTemplate(ConnectionFactory connectionFactory){
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter());
-        return rabbitTemplate;
-    }
+//    //RabbitMQ sử dụng JSON cho message.
+//    @Bean
+//    public MessageConverter messageConverter(){
+//        return new Jackson2JsonMessageConverter();
+//    }
+//
+//    // gửi/nhận message RabbitMQ với JSON converter.
+//    @Bean
+//    public AmqpTemplate getTemplate(ConnectionFactory connectionFactory){
+//        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+//        rabbitTemplate.setMessageConverter(messageConverter());
+//        return rabbitTemplate;
+//    }
 
 }

@@ -78,8 +78,10 @@ public class WebSecurityConfig {
                                     String.format("%s/orders/by-seller-id**", apiPrefix)).hasRole(Role.SELLER)
                             .requestMatchers(PUT,
                                     String.format("%s/orders/update-order-status**", apiPrefix)).hasRole(Role.SELLER)
+                            .requestMatchers(POST,
+                                    String.format("%s/orders**", apiPrefix)).hasRole(Role.USER)
 
-                            .requestMatchers(
+                            .requestMatchers(GET,
                                     String.format("%s/order-details/**", apiPrefix)).permitAll()
 
                             .requestMatchers(POST,

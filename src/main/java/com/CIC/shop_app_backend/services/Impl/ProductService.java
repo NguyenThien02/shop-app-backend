@@ -9,6 +9,7 @@ import com.CIC.shop_app_backend.repository.CategoryRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
 import com.CIC.shop_app_backend.responses.UserResponse;
+import com.CIC.shop_app_backend.services.IInventoryService;
 import com.CIC.shop_app_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +25,7 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final IInventoryService inventoryService;
 
     public Page<Product> getByProductCategory(PageRequest pageRequest, Long categoryId, String keyWord) {
         return productRepository.findProductsByCategory(categoryId, keyWord, pageRequest);
@@ -62,6 +64,8 @@ public class ProductService implements IProductService {
                 .orElseThrow(() -> new DataNotFoundException("Không tìm thấy sản phẩm có ID: " + productId));
         Long newStockQuantity = product.getStockQuantity() - quantity;
         product.setStockQuantity(newStockQuantity);
+
+        inventoryService.setInventory(productId, newStockQuantity);
         return productRepository.save(product);
     }
 

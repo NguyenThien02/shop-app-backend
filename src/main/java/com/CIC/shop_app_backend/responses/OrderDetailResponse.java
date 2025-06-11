@@ -26,7 +26,6 @@ public class OrderDetailResponse {
                 .orderResponse(OrderResponse.fromOrder(orderDetail.getOrder()))
                 .productResponse(ProductResponse.fromProduct(orderDetail.getProduct()))
                 .numberOfProducts(orderDetail.getNumberOfProducts())
-                .totalMoney(orderDetail.getTotalMoney())
                 .build();
     }
 }

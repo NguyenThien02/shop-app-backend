@@ -22,9 +22,9 @@ public class OrderDetailService implements IOrderDetailService {
     private final ProductRepository productRepository;
 
     @Override
-    public OrderDetail createOrderDetail(OrderDetailDTO orderDetailDTO) {
-        Order order = orderRepository.findById(orderDetailDTO.getOrderId())
-                .orElseThrow(() -> new DataNotFoundException("Not found Order with ID: " + orderDetailDTO.getOrderId()));
+    public OrderDetail createOrderDetail(OrderDetailDTO orderDetailDTO, Long orderID) {
+        Order order = orderRepository.findById(orderID)
+                .orElseThrow(() -> new DataNotFoundException("Not found Order with ID: " + orderID));
 
         Product product = productRepository.findById(orderDetailDTO.getProductId())
                 .orElseThrow(() -> new DataNotFoundException("Not found product with ID: " + orderDetailDTO.getProductId()));
@@ -33,7 +33,6 @@ public class OrderDetailService implements IOrderDetailService {
         orderDetail.setOrder(order);
         orderDetail.setProduct(product);
         orderDetail.setNumberOfProducts(orderDetailDTO.getNumberOfProducts());
-        orderDetail.setTotalMoney(orderDetailDTO.getTotalMoney());
 
         return orderDetailRepository.save(orderDetail);
     }
