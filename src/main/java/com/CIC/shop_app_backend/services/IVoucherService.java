@@ -9,4 +9,6 @@ public interface IVoucherService {
     Voucher createVoucher(VoucherDTO voucherDTO);
 
     List<Voucher> getVoucherBySeller(Long sellerId);
+
+    Voucher updateLimitUsage(Long voucherId, Integer limitUsage);
 }

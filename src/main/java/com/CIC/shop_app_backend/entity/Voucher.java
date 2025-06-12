@@ -34,7 +34,7 @@ public class Voucher {
 
     private String description;
 
-    @Column(name = "minOrder_cost")
+    @Column(name = "min_order_cost")
     private Double minOrderCost;
 
     @Column(name = "expiry_datetime")

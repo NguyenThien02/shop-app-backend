@@ -11,16 +11,19 @@ import com.CIC.shop_app_backend.entity.enums.OrderStatus;
 import com.CIC.shop_app_backend.entity.enums.VoucherType;
 import com.CIC.shop_app_backend.exceptions.DataInvalidParamException;
 import com.CIC.shop_app_backend.exceptions.DataNotFoundException;
+import com.CIC.shop_app_backend.exceptions.VoucherException;
 import com.CIC.shop_app_backend.repository.OrderRepository;
 import com.CIC.shop_app_backend.repository.ProductRepository;
 import com.CIC.shop_app_backend.repository.UserRepository;
 import com.CIC.shop_app_backend.repository.VoucherRepository;
 import com.CIC.shop_app_backend.services.IOrderService;
+import com.CIC.shop_app_backend.services.IVoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Service
@@ -31,6 +34,7 @@ public class OrderService implements IOrderService {
     private final VoucherRepository voucherRepository;
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
+    private final IVoucherService voucherService;
 
     @Override
     public Order createOrder(OrderDTO orderDTO, String extractedToken) {
@@ -54,14 +58,27 @@ public class OrderService implements IOrderService {
                     .orElseThrow(() -> new DataNotFoundException("Không tìm thấy sản phẩm có ID: " + orderDetailDTO.getProductId()));
             totalAmount += product.getPrice() * orderDetailDTO.getNumberOfProducts();
         }
+
         if(orderDTO.getVoucherId() != null) {
             voucher = voucherRepository.findById(orderDTO.getVoucherId())
                     .orElseThrow(() -> new DataNotFoundException("Không tìm thấy voucher có ID" + orderDTO.getVoucherId()));
+            if(voucher.getMinOrderCost() > totalAmount){
+                throw new VoucherException("Tổng tiền đơn hàng không đủ để áp dụng mã giảm giá. Yêu cầu tối thiểu: " + voucher.getMinOrderCost());
+            }
+            if (voucher.getExpiryDatetime() != null && LocalDate.now().isAfter(voucher.getExpiryDatetime())) {
+                throw new VoucherException("Mã giảm giá đã hết hạn sử dụng");
+            }
+            if(voucher.getLimitUsage() <= 0){
+                throw new VoucherException("Số lượng mã giảm giá đã hết");
+            }
+
             if(voucher.getType() == VoucherType.FIXED){
                 totalAmount = totalAmount - voucher.getAmount();
             }else if(voucher.getType() == VoucherType.PERCENTAGE){
-                totalAmount = totalAmount * (voucher.getAmount() / 100.0);
+                totalAmount = totalAmount - (totalAmount * (voucher.getAmount() / 100.0));
             }
+
+            voucher = voucherService.updateLimitUsage(voucher.getVoucherId(), voucher.getLimitUsage()-1);
         }
         else{
             voucher = null;

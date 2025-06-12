@@ -44,4 +44,13 @@ public class VoucherService implements IVoucherService {
         List<Voucher> voucherList = voucherRepository.findBySeller_UserId(sellerId);
         return voucherList;
     }
+
+    @Override
+    public Voucher updateLimitUsage(Long voucherId, Integer limitUsage) {
+        Voucher voucher = voucherRepository.findById(voucherId)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy mã giảm giá có ID: " + voucherId));
+
+        voucher.setLimitUsage(limitUsage);
+        return voucherRepository.save(voucher);
+    }
 }

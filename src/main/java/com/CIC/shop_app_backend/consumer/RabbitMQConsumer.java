@@ -48,6 +48,8 @@ public class RabbitMQConsumer {
 
                 productService.updateStockQuantityProduct(orderDetailDTO.getProductId(), orderDetailDTO.getNumberOfProducts());
                 LoggerUtils.logInfo("Cập nhật số lượng sản phẩm thành công" + orderDetailDTO.getProductId());
+
+                System.out.println("Hoàn thành quá trình đặt hàng");
             }
         } catch (Exception e) {
             System.err.println("Consumer xử lý lỗi: " + e.getMessage());
