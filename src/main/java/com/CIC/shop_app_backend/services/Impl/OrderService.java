@@ -59,7 +59,7 @@ public class OrderService implements IOrderService {
             totalAmount += product.getPrice() * orderDetailDTO.getNumberOfProducts();
         }
 
-        if(orderDTO.getVoucherId() != null) {
+        if(orderDTO.getVoucherId() != 0) {
             voucher = voucherRepository.findById(orderDTO.getVoucherId())
                     .orElseThrow(() -> new DataNotFoundException("Không tìm thấy voucher có ID" + orderDTO.getVoucherId()));
             if(voucher.getMinOrderCost() > totalAmount){

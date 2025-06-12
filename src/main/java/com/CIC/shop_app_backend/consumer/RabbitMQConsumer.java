@@ -15,11 +15,16 @@ import com.CIC.shop_app_backend.services.IInventoryService;
 import com.CIC.shop_app_backend.services.IOrderDetailService;
 import com.CIC.shop_app_backend.services.IOrderService;
 import com.CIC.shop_app_backend.services.IProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +34,7 @@ public class RabbitMQConsumer {
     private final IOrderDetailService orderDetailService;
     private final IProductService productService;
     private final IOrderService orderService;
-    private final IInventoryService inventoryService;
+    private final Validator validator;
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void consumer(String jsonString) {
@@ -37,7 +42,22 @@ public class RabbitMQConsumer {
             LoggerUtils.logInfo("Đang tiến hành xử lý đặt hàng");
             OrderRequestDTO orderRequestDTO = objectMapper.readValue(jsonString, OrderRequestDTO.class);
             OrderDTO orderDTO = orderRequestDTO.getOrderData();
+
+            Set<ConstraintViolation<OrderDTO>> violations = validator.validate(orderDTO);
+            if (!violations.isEmpty()) {
+                StringBuilder errorMessage = new StringBuilder();
+                for (ConstraintViolation<OrderDTO> violation : violations) {
+                    errorMessage.append(violation.getMessage()).append("; ");
+                }
+                LoggerUtils.logError("Dữ liệu không hợp lệ:", new IllegalArgumentException(errorMessage.toString()));
+                throw new RuntimeException(errorMessage.toString());
+            }
+
             String token = orderRequestDTO.getAuthToken();
+            if (token == null || token.isEmpty()) {
+                LoggerUtils.logInfo("Token được truyền vào Consumer rỗng");
+                throw new IllegalArgumentException("Token được truyền vào Consumer rỗng");
+            }
 
             Long orderId = orderService.createOrder(orderDTO, token).getOrderId();
             LoggerUtils.logInfo("Tạo đơn hàng thành công");

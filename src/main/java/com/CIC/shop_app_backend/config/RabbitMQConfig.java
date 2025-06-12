@@ -50,7 +50,7 @@ public class RabbitMQConfig {
         Map<String, Object> args = new HashMap<>();
         args.put("x-dead-letter-exchange", DLX);
         args.put("x-dead-letter-routing-key", DLQ_ROUTING_KEY);
-        args.put("x-expires", 60000); // 1 phút = 60.000 ms
+//        args.put("x-expires", 60000); // 1 phút = 60.000 ms
 
 //        QUEUE	Tên queue chính (thường là constant hoặc chuỗi tên queue)
 //        true	durable: Queue sẽ tồn tại khi RabbitMQ khởi động lại (persistent)
@@ -72,20 +72,5 @@ public class RabbitMQConfig {
     ) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
-
-
-//    //RabbitMQ sử dụng JSON cho message.
-//    @Bean
-//    public MessageConverter messageConverter(){
-//        return new Jackson2JsonMessageConverter();
-//    }
-//
-//    // gửi/nhận message RabbitMQ với JSON converter.
-//    @Bean
-//    public AmqpTemplate getTemplate(ConnectionFactory connectionFactory){
-//        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        rabbitTemplate.setMessageConverter(messageConverter());
-//        return rabbitTemplate;
-//    }
 
 }

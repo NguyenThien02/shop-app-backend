@@ -44,7 +44,6 @@ public class OrderController {
             @RequestHeader("Authorization") String token
     ) {
         try {
-
             for (OrderDetailDTO detailDTO : orderDTO.getOrderDetails()) {
                 if (!inventoryService.checkInventory(detailDTO.getProductId(), detailDTO.getNumberOfProducts())) {
                     Product product = productRepository.findById(detailDTO.getProductId())
@@ -58,6 +57,7 @@ public class OrderController {
                 }
             }
             String extractedToken = token.substring(7);
+            orderDTO.setSellerId(null);
             OrderRequestDTO orderRequestDTO = new OrderRequestDTO(orderDTO, extractedToken);
             String jsonString = objectMapper.writeValueAsString(orderRequestDTO);
 
